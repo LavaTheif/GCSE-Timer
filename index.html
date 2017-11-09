@@ -9,7 +9,9 @@
 <div class = "bg">
 <div class = "new">
 Exam: .<input placeholder = "Name" required size=10 id = "name"></input><br>
-Length: <input placeholder = "00" maxlength=2 size=2 id = "hour"></input>:<input placeholder = "00" required maxlength=2 size=2 id = "min"></input><br><br>
+Length: <input placeholder = "00" maxlength=2 size=2 id = "hour"></input>:<input placeholder = "00" required maxlength=2 size=2 id = "min"></input><br>
+<input type="checkbox" id = "extraTime">Display Extra Time<br>
+<br>
 <div onClick = "newExam()" id = "start">Start</div>
 </div>
 
@@ -101,6 +103,7 @@ function newExam(){
 hours = parseInt(document.getElementById("hour").value);//get hours and mins
 mins = parseInt(document.getElementById("min").value);
 name = (document.getElementById("name").value);
+extraTime = document.getElementById("extraTime").checked;
 
 if (isNaN(mins)) {
  mins = 0
@@ -110,11 +113,15 @@ if (isNaN(hours)) {
  }
 
 tot = mins + (60*hours);
-console.log(tot);
-console.log(tot+(tot/4));
+//console.log(tot);
+//console.log(tot+(tot/4));
 date = new Date(0, 0, 1, 0, tot);
-ex = new Date(0, 0, 1, 0, tot+(tot/4));
-
+ex = null;
+if(extraTime){
+	ex = new Date(0, 0, 1, 0, tot+(tot/4));
+}else{
+	ex = new Date(0, 0, 1, 0, tot);
+}
 elm = "ERROR";
 if(!ex1){
 	elm = "e1";
@@ -138,8 +145,11 @@ if(!ex1){
 }
 
 var div = document.getElementById(elm);//get elm
-div.innerHTML = name+"<br><br>Length: "+format(tot)+"<br>Start: " + calcTime(new Date(0, 0, 0))+"<br>Finish: "+calcTime(date, false)+"<br>Extra time finish: " + calcTime(ex, false);
-
+if(extraTime){
+	div.innerHTML = name+"<br><br>Length: "+format(tot)+"<br>Start: " + calcTime(new Date(0, 0, 0))+"<br>Finish: "+calcTime(date, false)+"<br>Extra time finish: " + calcTime(ex, false);
+}else{
+	div.innerHTML = name+"<br><br>Length: "+format(tot)+"<br>Start: " + calcTime(new Date(0, 0, 0))+"<br>Finish: "+calcTime(date, false)+"<br>";
+}
 }
 //alert("Finish: "+calcTime(date));
 //alert("Extra time: "+calcTime(ex));
